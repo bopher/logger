@@ -1,0 +1,4 @@
+github.com/bopher/utils v1.0.0 h1:PcHqnpv9egDCsutiGCg8zhMXeP2OAIGsm2XOWek0yMk=
+github.com/bopher/utils v1.0.0/go.mod h1:3ymS6CIEvVp2k33BgYdc2h9q8LKLcl/bH4MDGmCfcmg=
+github.com/yaa110/go-persian-calendar v1.0.2 h1:G5z6Heg4f2v4fwGSyRGXFsapr27RtrVScGsPttVyuxU=
+github.com/yaa110/go-persian-calendar v1.0.2/go.mod h1:qtnmHCS9u1EiwzzSCSttGoxD5NfV9ZMzymxFCBYmqfg=
