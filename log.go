@@ -4,5 +4,5 @@ package logger
 type Log interface {
 	Type(t string) Log
 	Tags(tags ...string) Log
-	Print(format string, params ...interface{})
+	Print(format string, params ...interface{}) error
 }

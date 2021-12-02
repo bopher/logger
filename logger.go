@@ -9,7 +9,7 @@ type Logger interface {
 	// Warning generate new warning message
 	Warning() Log
 	// Divider generate new divider message
-	Divider(divider string, count uint8, title string)
+	Divider(divider string, count uint8, title string) error
 	// Raw write raw message to output
-	Raw(format string, params ...interface{})
+	Raw(format string, params ...interface{}) error
 }

@@ -8,7 +8,7 @@ Logger has two requirements you must meet before start using logger.
 
 ### Time Formatter
 
-time formatter is a function that accept time and format and returns formatted date in locale(gregorian, jalali, etc.). logger use formatter function for customizable date format.
+time formatter is a function that accept time and returns formatted date in locale(gregorian, jalali, etc.). logger use formatter function for customizable date format.
 
 By default logger contains two formatter function, gregorian and jalali. you can write your own formatter function by implementing `TimeFormatter` type.
 
@@ -41,7 +41,7 @@ Log message interface contains following methods:
 **Note:** Log message methods return log instance as return value for use methods in chaining style. e.g.:
 
 ```go
-myLog.Type("Error").Tags("Server", "Exception").Print("")
+err := myLog.Type("Error").Tags("Server", "Exception").Print("")
 ```
 
 ##### Type
@@ -74,7 +74,7 @@ Format and write message to writers. this function use standard go `fmt.Sprintf`
 
 ```go
 // Signature:
-Print(format string, params ...interface{})
+Print(format string, params ...interface{}) error
 ```
 
 ## Logger
@@ -110,7 +110,7 @@ Log() Log
 
 // Example:
 // You can change message type
-lgr.Log().Type("INFO").Tags("A", "B").Print("")
+err := lgr.Log().Type("INFO").Tags("A", "B").Print("")
 ```
 
 #### Error
@@ -122,7 +122,7 @@ Generate new log message with `"Error"` type.
 Error() Log
 
 // Example:
-lgr.Error().Tags("A", "B").Print("")
+err := lgr.Error().Tags("A", "B").Print("")
 ```
 
 #### Warning
@@ -134,7 +134,7 @@ Generate new log message with `"Warning"` type.
 Warning() Log
 
 // Example:
-lgr.Warning().Tags("A", "B").Print("")
+err := lgr.Warning().Tags("A", "B").Print("")
 ```
 
 #### Divider
@@ -143,10 +143,10 @@ Print new divider message with title and length.
 
 ```go
 // Signature:
-Divider(divider string, count uint8, title string)
+Divider(divider string, count uint8, title string) error
 
 // Example:
-lgr.Divider("=", 50, "SQL LOG")
+err := lgr.Divider("=", 50, "SQL LOG")
 ```
 
 #### Raw
@@ -155,10 +155,10 @@ Write raw message to logger writers. this message follow `fmt.Sprintf` pattern.
 
 ```go
 // Signature:
-Raw(format string, params ...interface{})
+Raw(format string, params ...interface{}) error
 
 // Example:
-lgr.Raw("Total users count is: %d", 5120})
+err := lgr.Raw("Total users count is: %d", 5120})
 ```
 
 ## File Logger

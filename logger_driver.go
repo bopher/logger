@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	"github.com/bopher/utils"
 )
 
 // loggerDriver standard lgr using io.writer
@@ -13,35 +15,39 @@ type loggerDriver struct {
 	formatter  TimeFormatter
 }
 
-func (lgr *loggerDriver) init(tf string, f TimeFormatter, writers ...io.Writer) {
-	lgr.timeFormat = tf
-	lgr.writers = writers
-	lgr.formatter = f
+func (this *loggerDriver) init(tf string, f TimeFormatter, writers ...io.Writer) {
+	this.timeFormat = tf
+	this.writers = writers
+	this.formatter = f
 }
 
-func (lgr *loggerDriver) log() Log {
+func (loggerDriver) err(format string, args ...interface{}) error {
+	return utils.TaggedError([]string{"LoggerDriver"}, format, args...)
+}
+
+func (this loggerDriver) log() Log {
 	log := new(logDriver)
-	log.init(lgr.timeFormat, lgr.formatter, lgr.writers...)
+	log.init(this.timeFormat, this.formatter, this.writers...)
 	return log
 }
 
 // Log generate new log message
-func (lgr *loggerDriver) Log() Log {
-	return lgr.log().Type("LOG")
+func (this loggerDriver) Log() Log {
+	return this.log().Type("LOG")
 }
 
 // Error generate new error message
-func (lgr *loggerDriver) Error() Log {
-	return lgr.log().Type("ERROR")
+func (this loggerDriver) Error() Log {
+	return this.log().Type("ERROR")
 }
 
 // Warning generate new warning message
-func (lgr *loggerDriver) Warning() Log {
-	return lgr.log().Type("WARN")
+func (this loggerDriver) Warning() Log {
+	return this.log().Type("WARN")
 }
 
 // Divider generate new divider message
-func (lgr *loggerDriver) Divider(divider string, count uint8, title string) {
+func (this loggerDriver) Divider(divider string, count uint8, title string) error {
 	if title != "" {
 		title = " " + title + " "
 	}
@@ -58,14 +64,22 @@ func (lgr *loggerDriver) Divider(divider string, count uint8, title string) {
 	} else {
 		halfCount = halfCount / 2
 	}
-	for _, writer := range lgr.writers {
-		writer.Write([]byte(strings.Repeat(divider, halfCount) + strings.ToUpper(title) + strings.Repeat(divider, halfCount) + "\n"))
+	for _, writer := range this.writers {
+		_, err := writer.Write([]byte(strings.Repeat(divider, halfCount) + strings.ToUpper(title) + strings.Repeat(divider, halfCount) + "\n"))
+		if err != nil {
+			return this.err(err.Error())
+		}
 	}
+	return nil
 }
 
 // Raw write raw message to output
-func (lgr *loggerDriver) Raw(format string, params ...interface{}) {
-	for _, writer := range lgr.writers {
-		writer.Write([]byte(fmt.Sprintf(format, params...)))
+func (this loggerDriver) Raw(format string, params ...interface{}) error {
+	for _, writer := range this.writers {
+		_, err := writer.Write([]byte(fmt.Sprintf(format, params...)))
+		if err != nil {
+			return this.err(err.Error())
+		}
 	}
+	return nil
 }

@@ -16,21 +16,29 @@ type fileLogger struct {
 	formatter  TimeFormatter
 }
 
-func (fLogger *fileLogger) init(path string, prefix string, tf string, f TimeFormatter) {
-	fLogger.path = path
-	fLogger.prefix = prefix
-	fLogger.timeFormat = tf
-	fLogger.formatter = f
+func (this *fileLogger) init(path string, prefix string, tf string, f TimeFormatter) {
+	this.path = path
+	this.prefix = prefix
+	this.timeFormat = tf
+	this.formatter = f
 }
 
-func (fLogger *fileLogger) Write(data []byte) (int, error) {
-	utils.CreateDirectory(fLogger.path)
-	filename := fLogger.prefix + " " + fLogger.formatter(time.Now().UTC(), fLogger.timeFormat) + ".log"
-	filename = path.Join(fLogger.path, filename)
+func (fileLogger) err(format string, args ...interface{}) error {
+	return utils.TaggedError([]string{"FileLogger"}, format, args...)
+}
+
+func (this fileLogger) Write(data []byte) (int, error) {
+	utils.CreateDirectory(this.path)
+	filename := this.prefix + " " + this.formatter(time.Now().UTC(), this.timeFormat) + ".log"
+	filename = path.Join(this.path, filename)
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return 0, err
 	}
 	defer f.Close()
-	return f.Write(data)
+	n, err := f.Write(data)
+	if err != nil {
+		err = this.err(err.Error())
+	}
+	return n, err
 }

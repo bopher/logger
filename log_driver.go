@@ -5,6 +5,8 @@ import (
 	"io"
 	"strings"
 	"time"
+
+	"github.com/bopher/utils"
 )
 
 // logDriver standard log message
@@ -16,43 +18,68 @@ type logDriver struct {
 	formatter  TimeFormatter
 }
 
-func (log *logDriver) init(tf string, f TimeFormatter, writers ...io.Writer) {
-	log.timeFormat = tf
-	log.writers = writers
-	log.formatter = f
+func (this *logDriver) init(tf string, f TimeFormatter, writers ...io.Writer) {
+	this.timeFormat = tf
+	this.writers = writers
+	this.formatter = f
+}
+
+func (logDriver) err(format string, args ...interface{}) error {
+	return utils.TaggedError([]string{"LogDriver"}, format, args...)
 }
 
 // Type Set message type
-func (log *logDriver) Type(t string) Log {
-	log.typ = t
-	return log
+func (this *logDriver) Type(t string) Log {
+	this.typ = t
+	return this
 }
 
 // Tags add tags to message
-func (log *logDriver) Tags(tags ...string) Log {
+func (this *logDriver) Tags(tags ...string) Log {
 	for _, tag := range tags {
-		log.tags = append(log.tags, tag)
+		this.tags = append(this.tags, tag)
 	}
-	return log
+	return this
 }
 
 // Print print message to writer
-func (log *logDriver) Print(format string, params ...interface{}) {
-	for _, writer := range log.writers {
+func (this logDriver) Print(format string, params ...interface{}) error {
+	for _, writer := range this.writers {
 		// Datetime
-		writer.Write([]byte(log.formatter(time.Now().UTC(), log.timeFormat)))
+		_, err := writer.Write([]byte(this.formatter(time.Now().UTC(), this.timeFormat)))
+		if err != nil {
+			return this.err(err.Error())
+		}
+
 		// Type
-		t := []rune(strings.ToUpper(log.typ))
+		t := []rune(strings.ToUpper(this.typ))
 		if len(t) >= 5 {
 			t = t[0:5]
 		}
-		writer.Write([]byte(fmt.Sprintf("%6s ", string(t))))
-		// Message
-		writer.Write([]byte(fmt.Sprintf(strings.ReplaceAll(format, "\n", ""), params...)))
-		// Tags
-		for _, tag := range log.tags {
-			writer.Write([]byte(fmt.Sprintf(" [%s]", tag)))
+		_, err = writer.Write([]byte(fmt.Sprintf("%6s ", string(t))))
+		if err != nil {
+			return this.err(err.Error())
 		}
-		writer.Write([]byte("\n"))
+
+		// Message
+		_, err = writer.Write([]byte(fmt.Sprintf(strings.ReplaceAll(format, "\n", ""), params...)))
+		if err != nil {
+			return this.err(err.Error())
+		}
+
+		// Tags
+		for _, tag := range this.tags {
+			_, err = writer.Write([]byte(fmt.Sprintf(" [%s]", tag)))
+			if err != nil {
+				return this.err(err.Error())
+			}
+		}
+
+		_, err = writer.Write([]byte("\n"))
+		if err != nil {
+			return this.err(err.Error())
+		}
 	}
+
+	return nil
 }
