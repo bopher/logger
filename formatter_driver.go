@@ -11,7 +11,7 @@ func GregorianFormatter(t time.Time, format string) string {
 	return t.Format(format)
 }
 
-// JalaliFormatter jalali date formatter
+// JalaliFormatter jalali (tehran) date formatter
 func JalaliFormatter(t time.Time, format string) string {
 	return jalali.NewTehran(time.Now()).Format(format)
 }

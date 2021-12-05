@@ -33,7 +33,7 @@ func (this fileLogger) Write(data []byte) (int, error) {
 	filename = path.Join(this.path, filename)
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return 0, err
+		return 0, this.err(err.Error())
 	}
 	defer f.Close()
 	n, err := f.Write(data)
