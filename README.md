@@ -161,6 +161,30 @@ Raw(format string, params ...interface{}) error
 err := lgr.Raw("Total users count is: %d", 5120})
 ```
 
+#### AddWriter
+
+Add new writer to logger.
+
+```go
+// Signature:
+AddWriter(name string, writer io.Writer)
+
+// Example:
+lgr.AddWriter("console", os.Stdout)
+```
+
+#### RemoveWriter
+
+Remove writer from logger.
+
+```go
+// Signature:
+RemoveWriter(name string)
+
+// Example:
+lgr.RemoveWriter("console")
+```
+
 ## File Logger
 
 File logger is a standard writer for generating and writing to time format based file names.

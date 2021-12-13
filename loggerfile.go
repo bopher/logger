@@ -8,19 +8,11 @@ import (
 	"github.com/bopher/utils"
 )
 
-// fileLogger time formatted file logger
 type fileLogger struct {
 	path       string
 	prefix     string
 	timeFormat string
 	formatter  TimeFormatter
-}
-
-func (this *fileLogger) init(path string, prefix string, tf string, f TimeFormatter) {
-	this.path = path
-	this.prefix = prefix
-	this.timeFormat = tf
-	this.formatter = f
 }
 
 func (fileLogger) err(format string, args ...interface{}) error {

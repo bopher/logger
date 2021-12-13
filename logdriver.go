@@ -18,23 +18,15 @@ type logDriver struct {
 	formatter  TimeFormatter
 }
 
-func (this *logDriver) init(tf string, f TimeFormatter, writers ...io.Writer) {
-	this.timeFormat = tf
-	this.writers = writers
-	this.formatter = f
-}
-
 func (logDriver) err(format string, args ...interface{}) error {
 	return utils.TaggedError([]string{"LogDriver"}, format, args...)
 }
 
-// Type Set message type
 func (this *logDriver) Type(t string) Log {
 	this.typ = t
 	return this
 }
 
-// Tags add tags to message
 func (this *logDriver) Tags(tags ...string) Log {
 	for _, tag := range tags {
 		this.tags = append(this.tags, tag)
@@ -42,7 +34,6 @@ func (this *logDriver) Tags(tags ...string) Log {
 	return this
 }
 
-// Print print message to writer
 func (this logDriver) Print(format string, params ...interface{}) error {
 	for _, writer := range this.writers {
 		// Datetime

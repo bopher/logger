@@ -8,17 +8,10 @@ import (
 	"github.com/bopher/utils"
 )
 
-// loggerDriver standard lgr using io.writer
 type loggerDriver struct {
 	timeFormat string
-	writers    []io.Writer
 	formatter  TimeFormatter
-}
-
-func (this *loggerDriver) init(tf string, f TimeFormatter, writers ...io.Writer) {
-	this.timeFormat = tf
-	this.writers = writers
-	this.formatter = f
+	writers    map[string]io.Writer
 }
 
 func (loggerDriver) err(format string, args ...interface{}) error {
@@ -26,27 +19,25 @@ func (loggerDriver) err(format string, args ...interface{}) error {
 }
 
 func (this loggerDriver) log() Log {
-	log := new(logDriver)
-	log.init(this.timeFormat, this.formatter, this.writers...)
-	return log
+	writers := make([]io.Writer, 0)
+	for _, w := range this.writers {
+		writers = append(writers, w)
+	}
+	return NewLog(this.timeFormat, this.formatter, "LOG", writers...)
 }
 
-// Log generate new log message
 func (this loggerDriver) Log() Log {
 	return this.log().Type("LOG")
 }
 
-// Error generate new error message
 func (this loggerDriver) Error() Log {
 	return this.log().Type("ERROR")
 }
 
-// Warning generate new warning message
 func (this loggerDriver) Warning() Log {
 	return this.log().Type("WARN")
 }
 
-// Divider generate new divider message
 func (this loggerDriver) Divider(divider string, count uint8, title string) error {
 	if title != "" {
 		title = " " + title + " "
@@ -73,7 +64,6 @@ func (this loggerDriver) Divider(divider string, count uint8, title string) erro
 	return nil
 }
 
-// Raw write raw message to output
 func (this loggerDriver) Raw(format string, params ...interface{}) error {
 	for _, writer := range this.writers {
 		_, err := writer.Write([]byte(fmt.Sprintf(format, params...)))
@@ -82,4 +72,12 @@ func (this loggerDriver) Raw(format string, params ...interface{}) error {
 		}
 	}
 	return nil
+}
+
+func (this *loggerDriver) AddWriter(name string, writer io.Writer) {
+	this.writers[name] = writer
+}
+
+func (this *loggerDriver) RemoveWriter(name string) {
+	delete(this.writers, name)
 }
