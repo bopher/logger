@@ -3,7 +3,7 @@ module github.com/bopher/logger
 go 1.17
 
 require (
-	github.com/bopher/jalali v1.1.0
+	github.com/bopher/jalali v1.1.1
 	github.com/bopher/utils v1.6.0
 )
 

@@ -1,5 +1,7 @@
 github.com/bopher/jalali v1.1.0 h1:/m7a3bMPV75JHINbmHpWwpjkRMRmZDihzZjkeYRPr+A=
 github.com/bopher/jalali v1.1.0/go.mod h1:Vqd9+q/aVLPN5q6im0g5ZWDbrR+WqKFy8P/wxF19vBs=
+github.com/bopher/jalali v1.1.1 h1:sXL3qRMF143TD55T0qWMpYvPZT8srHG86OvA/PAh6dU=
+github.com/bopher/jalali v1.1.1/go.mod h1:Vqd9+q/aVLPN5q6im0g5ZWDbrR+WqKFy8P/wxF19vBs=
 github.com/bopher/utils v1.6.0 h1:kB8VtlI5zRDQdL4WTdYlB/SWAFXjKxhYw9JypvxWs58=
 github.com/bopher/utils v1.6.0/go.mod h1:xsyFIzO8jg8AGhAcCfZ7piUGpmsiL8nSNVsbNeC6LSg=
 github.com/yaa110/go-persian-calendar v1.0.2 h1:G5z6Heg4f2v4fwGSyRGXFsapr27RtrVScGsPttVyuxU=
