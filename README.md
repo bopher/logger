@@ -206,3 +206,24 @@ mW := logger.NewFileLogger("logs", "app", "2006-01", logger.GregorianFormatter) 
 dW := logger.NewFileLogger("logs", "app", "2006-01-02", logger.GregorianFormatter) // daily file logger
 hW := logger.NewFileLogger("logs", "app", "2006-01-02 15", logger.GregorianFormatter) // hourly file logger
 ```
+
+## Utilities
+
+### ClearCommand
+
+Helper cli command for clear logs.
+
+**Note:** For cleaning all directory in log path, you can pass `all` instead of directory name.
+
+```bash
+myApp clear [Directory name or all for clear anything]
+```
+
+```go
+// Signature:
+ClearCommand(storagePath string) *cobra.Command
+
+// Example
+import "github.com/bopher/cliutils/storage"
+rootCmd.AddCommand(storage.ClearCommand("./storage"))
+```
