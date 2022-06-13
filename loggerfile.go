@@ -15,7 +15,7 @@ type fileLogger struct {
 	formatter  TimeFormatter
 }
 
-func (fileLogger) err(format string, args ...interface{}) error {
+func (fileLogger) err(format string, args ...any) error {
 	return utils.TaggedError([]string{"FileLogger"}, format, args...)
 }
 

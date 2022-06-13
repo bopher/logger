@@ -74,7 +74,7 @@ Format and write message to writers. this function use standard go `fmt.Sprintf`
 
 ```go
 // Signature:
-Print(format string, params ...interface{}) error
+Print(format string, params ...any) error
 ```
 
 ## Logger
@@ -155,7 +155,7 @@ Write raw message to logger writers. this message follow `fmt.Sprintf` pattern.
 
 ```go
 // Signature:
-Raw(format string, params ...interface{}) error
+Raw(format string, params ...any) error
 
 // Example:
 err := lgr.Raw("Total users count is: %d", 5120})

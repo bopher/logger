@@ -18,7 +18,7 @@ type logDriver struct {
 	formatter  TimeFormatter
 }
 
-func (logDriver) err(format string, args ...interface{}) error {
+func (logDriver) err(format string, args ...any) error {
 	return utils.TaggedError([]string{"LogDriver"}, format, args...)
 }
 
@@ -34,7 +34,7 @@ func (this *logDriver) Tags(tags ...string) Log {
 	return this
 }
 
-func (this logDriver) Print(format string, params ...interface{}) error {
+func (this logDriver) Print(format string, params ...any) error {
 	for _, writer := range this.writers {
 		// Datetime
 		_, err := writer.Write([]byte(this.formatter(time.Now().UTC(), this.timeFormat)))

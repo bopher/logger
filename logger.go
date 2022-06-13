@@ -13,7 +13,7 @@ type Logger interface {
 	// Divider generate new divider message
 	Divider(divider string, count uint8, title string) error
 	// Raw write raw message to output
-	Raw(format string, params ...interface{}) error
+	Raw(format string, params ...any) error
 	// AddWriter add new writer to logger
 	AddWriter(name string, writer io.Writer)
 	// RemoveWriter remove writer from logger

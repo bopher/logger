@@ -14,7 +14,7 @@ type loggerDriver struct {
 	writers    map[string]io.Writer
 }
 
-func (loggerDriver) err(format string, args ...interface{}) error {
+func (loggerDriver) err(format string, args ...any) error {
 	return utils.TaggedError([]string{"LoggerDriver"}, format, args...)
 }
 
@@ -64,7 +64,7 @@ func (this loggerDriver) Divider(divider string, count uint8, title string) erro
 	return nil
 }
 
-func (this loggerDriver) Raw(format string, params ...interface{}) error {
+func (this loggerDriver) Raw(format string, params ...any) error {
 	for _, writer := range this.writers {
 		_, err := writer.Write([]byte(fmt.Sprintf(format, params...)))
 		if err != nil {

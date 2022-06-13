@@ -7,5 +7,5 @@ type Log interface {
 	// Tags add tags to message
 	Tags(tags ...string) Log
 	// Print print message to writer
-	Print(format string, params ...interface{}) error
+	Print(format string, params ...any) error
 }
